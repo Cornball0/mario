@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mario Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #87CEEB; /* Sky Blue */
+        }
+
+        #gameCanvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #87CEEB; /* Sky Blue */
+        }
+
+        .player {
+            width: 50px;
+            height: 50px;
+            background-color: #FF0000; /* Red */
+            position: absolute;
+        }
+
+        .platform {
+            background-color: #8B4513; /* Saddle Brown */
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameCanvas"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const gameCanvas = document.getElementById("gameCanvas");
+            const player = document.createElement("div");
+            const platforms = [];
+
+            player.className = "player";
+            gameCanvas.appendChild(player);
+
+            function createPlatform(x, y, width, height) {
+                const platform = document.createElement("div");
+                platform.className = "platform";
+                platform.style.width = width + "px";
+                platform.style.height = height + "px";
+                platform.style.left = x + "px";
+                platform.style.top = y + "px";
+                gameCanvas.appendChild(platform);
+                platforms.push(platform);
+            }
+
+            createPlatform(0, 400, 800, 20); // Ground platform
+
+            const playerSpeed = 5;
+
+            function update() {
+                // Player movement
+                window.addEventListener("keydown", function (event) {
+                    switch (event.key) {
+                        case "ArrowLeft":
+                            player.style.left = (parseFloat(player.style.left) - playerSpeed) + "px";
+                            break;
+                        case "ArrowRight":
+                            player.style.left = (parseFloat(player.style.left) + playerSpeed) + "px";
+                            break;
+                    }
+                });
+
+                // Keep the player within the canvas bounds
+                player.style.left = Math.max(0, Math.min(parseFloat(player.style.left), gameCanvas.clientWidth - player.clientWidth)) + "px";
+            }
+
+            function gameLoop() {
+                update();
+                requestAnimationFrame(gameLoop);
+            }
+
+            gameLoop();
+        });
+    </script>
+</body>
+</html>
